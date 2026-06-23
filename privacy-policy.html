@@ -6,206 +6,396 @@
   <title>DrivePulse Privacy Policy</title>
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #0b1016;
-      --panel: #111a23;
-      --text: #eef4f8;
-      --muted: #aab6c2;
-      --line: #263543;
-      --accent: #36d27d;
+      color-scheme: dark;
+      --bg: #071017;
+      --panel: #101b25;
+      --panel-soft: #132532;
+      --text: #f4f8fb;
+      --muted: #a8b7c5;
+      --line: #263848;
+      --accent: #00d983;
+      --accent-soft: rgba(0, 217, 131, 0.14);
+      --warning: #ffc857;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: var(--bg);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0, 217, 131, 0.12), transparent 34rem),
+        linear-gradient(145deg, #071017 0%, #0a121b 52%, #05090f 100%);
       color: var(--text);
       line-height: 1.65;
     }
 
     main {
-      max-width: 880px;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 40px 20px 64px;
+      padding: 48px 20px 72px;
     }
 
     header {
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 28px;
-      padding-bottom: 24px;
+      display: grid;
+      gap: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(16, 27, 37, 0.96), rgba(12, 21, 30, 0.96));
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 34px;
-      line-height: 1.2;
+      margin: 0;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: 0;
     }
 
     h2 {
-      margin-top: 32px;
-      font-size: 22px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 8px;
+      margin: 34px 0 14px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 17px;
     }
 
     p, li {
       color: var(--muted);
     }
 
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
     strong {
       color: var(--text);
     }
 
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 18px;
-      margin: 18px 0;
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
     }
 
     .meta {
-      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       margin: 0;
+      color: var(--muted);
     }
 
-    a {
-      color: var(--accent);
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pill strong {
+      margin-right: 6px;
+    }
+
+    .card {
+      padding: 22px;
+      margin: 16px 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(16, 27, 37, 0.86);
+    }
+
+    .notice {
+      border-color: rgba(0, 217, 131, 0.32);
+      background: var(--accent-soft);
+    }
+
+    .warning {
+      border-color: rgba(255, 200, 87, 0.35);
+      background: rgba(255, 200, 87, 0.08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .data-row {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel-soft);
+    }
+
+    .data-row p:last-child {
+      margin-bottom: 0;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      color: #81909f;
+      font-size: 14px;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding-top: 28px;
+      }
+
+      header,
+      .card {
+        padding: 18px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <main>
     <header>
-      <h1>DrivePulse Privacy Policy</h1>
-      <p class="meta">Effective date: June 18, 2026</p>
-      <p class="meta">App name: DrivePulse</p>
-      <p class="meta">Package name: com.drivepulse.gps</p>
+      <div>
+        <h1>DrivePulse Privacy Policy</h1>
+        <p>
+          DrivePulse is a GPS driving utility for maps, live speed, trip recording,
+          trip history, Street View access, and map measurement tools.
+        </p>
+      </div>
+      <p class="meta">
+        <span class="pill"><strong>Effective:</strong> June 23, 2026</span>
+        <span class="pill"><strong>App:</strong> DrivePulse</span>
+        <span class="pill"><strong>Package:</strong> com.drivepulse.gps</span>
+      </p>
     </header>
 
-    <section class="card">
+    <section class="card notice">
       <p>
-        DrivePulse is a GPS driving utility app that provides live map viewing, GPS speed display,
-        trip recording, trip history, and map measurement tools. This Privacy Policy explains what
-        information DrivePulse uses, how it is stored, and how users can control it.
+        DrivePulse does not require an account and does not currently provide cloud sync.
+        Saved trips, saved measurements, and app preferences are stored on your device.
       </p>
       <p>
-        DrivePulse is designed to work with local on-device storage. The current version does not
-        require account login and does not sync your trip or measurement data to a DrivePulse cloud
-        server.
+        Some app functionality uses third-party services such as Google Maps and, on Android,
+        Firebase Analytics. Those services may process limited technical, usage, device, or
+        location-related information as described below.
       </p>
     </section>
 
-    <h2>Information We Collect Or Use</h2>
-    <p>DrivePulse may use the following information when you use the app:</p>
-    <ul>
-      <li><strong>Approximate location:</strong> Used to show your general position on the map when location permission is granted.</li>
-      <li><strong>Precise location:</strong> Used to show current location, calculate live speed, record trip route points while the app is open, and support map measurement features.</li>
-      <li><strong>Trip data:</strong> Includes trip duration, distance, speed statistics, and route points created when you start and stop trip recording.</li>
-      <li><strong>Measurement data:</strong> Includes saved distance, area, and radius measurements, titles, units, and selected map points.</li>
-      <li><strong>App settings and map preferences:</strong> Such as selected map type, dark mode, and selected units where applicable.</li>
-    </ul>
+    <h2>Information DrivePulse Uses</h2>
+    <div class="grid">
+      <div class="data-row">
+        <h3>Location</h3>
+        <p>
+          Approximate and precise location may be used to show your current position,
+          calculate live speed, record trip route points, and move map tools to your location.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Trip Data</h3>
+        <p>
+          Trips can include duration, distance, average speed, max speed, start/end coordinates,
+          route points, and generated trip summary images.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Measurement Data</h3>
+        <p>
+          Saved distance, area, and radius measurements can include titles, selected units,
+          calculated values, map points, and circle radius data.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Settings</h3>
+        <p>
+          DrivePulse stores preferences such as language, theme, speed unit, map style,
+          and speed alert configuration.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Analytics Data</h3>
+        <p>
+          Android builds may use Firebase Analytics for app interactions, screen usage,
+          feature usage, diagnostics, and device or app identifiers.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Shared Content</h3>
+        <p>
+          When you choose to share a trip summary image, the image is handled by the app
+          or service you select from the system share sheet.
+        </p>
+      </div>
+    </div>
 
-    <h2>How We Use Information</h2>
-    <p>DrivePulse uses information only to provide app features, including:</p>
+    <h2>How Information Is Used</h2>
+    <p>DrivePulse uses information to provide and improve app features, including:</p>
     <ul>
-      <li>Showing your current position on the map.</li>
-      <li>Displaying live GPS speed.</li>
-      <li>Recording trips while the app is open.</li>
-      <li>Showing trip history and trip detail screens.</li>
-      <li>Creating, saving, editing, and deleting map measurements.</li>
-      <li>Improving accuracy of distance, area, radius, and route calculations.</li>
+      <li>Showing maps, traffic layers, current location, and Street View entry points.</li>
+      <li>Displaying live GPS speed, HUD mode, full-screen speed, and speed alerts.</li>
+      <li>Recording, saving, showing, deleting, and sharing trip summaries.</li>
+      <li>Creating, saving, editing, updating, and deleting distance, area, and radius measurements.</li>
+      <li>Remembering app preferences such as language, theme, map style, and units.</li>
+      <li>Understanding app usage and stability so DrivePulse can be improved.</li>
     </ul>
 
     <h2>Location Permission</h2>
     <p>
-      DrivePulse requests location permission because core features depend on location, including
-      current location on the map, live speed calculation, trip recording, and map-based measurement
-      workflows.
+      DrivePulse requests location permission because current location, speedometer,
+      trip recording, and map tools depend on location. You can deny location permission
+      and still pan maps or add measurement points manually.
     </p>
     <p>
-      You can deny location permission and still use map viewing and measurement features manually.
-      Features that require current location or GPS speed may not work until location permission and
-      device location services are enabled.
+      If location permission or device location services are disabled, features that need
+      current location or GPS speed may not work until they are enabled.
     </p>
     <p>
-      The current closed-testing version does not declare Android background location permission.
-      Trip recording is intended for use while the app is open.
+      The current version is designed for foreground trip recording and does not declare
+      Android background location permission.
     </p>
 
     <h2>Local Storage</h2>
     <p>
-      Saved trips and saved measurements are stored locally on your device using the app database.
-      DrivePulse does not currently upload this data to a DrivePulse server.
+      Saved trips and saved measurements are stored locally in the app database on your device.
+      DrivePulse does not currently upload saved trip history, saved measurement records,
+      route titles, or saved route point lists to a DrivePulse cloud server.
     </p>
     <p>
-      Android app data backup is disabled for this version so local app data is not backed up by
-      Android's automatic app backup mechanism.
+      Android automatic app backup is disabled for this version, so local DrivePulse app data
+      is not backed up by Android's automatic app backup mechanism.
+    </p>
+
+    <h2>Analytics And Diagnostics</h2>
+    <p>
+      DrivePulse may use Firebase Analytics on Android to understand which screens and features
+      are used, monitor app behavior, and improve reliability. Analytics data may include app
+      interactions, screen names, feature events, diagnostics, and device or app identifiers.
+    </p>
+    <p>
+      DrivePulse should not intentionally log precise trip routes, saved measurement points,
+      saved measurement titles, start/end coordinates, speed values, or personal notes as analytics
+      event parameters. If this changes in a future release, this policy and Play Store disclosures
+      should be updated before release.
+    </p>
+    <p>
+      Firebase is provided by Google. You can learn more at
+      <a href="https://firebase.google.com/support/privacy">Firebase Privacy and Security</a>.
+    </p>
+
+    <h2>Third-Party Services</h2>
+    <p>DrivePulse uses third-party services to provide app functionality:</p>
+    <ul>
+      <li>
+        <strong>Google Maps Platform:</strong> Used for maps, map styling, traffic display,
+        Street View, and map-related interactions. Google may process technical and
+        location-related information according to Google's privacy practices.
+      </li>
+      <li>
+        <strong>Firebase Analytics on Android:</strong> Used for usage analytics and app
+        improvement as described above.
+      </li>
+    </ul>
+    <p>
+      Google's Privacy Policy is available at
+      <a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>.
     </p>
 
     <h2>Data Sharing</h2>
     <p>
-      DrivePulse does not sell your personal data. DrivePulse does not currently share your saved
-      trip or measurement records with a DrivePulse backend or cloud sync service.
+      DrivePulse does not sell your personal data. DrivePulse does not currently provide a
+      DrivePulse backend, account sync, or cloud backup for saved trips and measurements.
     </p>
     <p>
-      DrivePulse uses Google Maps services to display maps and traffic-related map data. Google Maps
-      may process technical and location-related data according to Google's own terms and privacy
-      policies. You can review Google's Privacy Policy at
-      <a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a>.
+      Data may be processed by service providers such as Google Maps Platform and Firebase
+      Analytics to provide maps, analytics, diagnostics, and related app functionality.
     </p>
-
-    <h2>Data Deletion</h2>
     <p>
-      You can delete saved measurements from the Saved Measurements screen. You can delete saved
-      trips from the Trip History screen. You may also delete all local DrivePulse app data by
-      uninstalling the app or clearing app storage from your device settings.
-    </p>
-
-    <h2>Children's Privacy</h2>
-    <p>
-      DrivePulse is not directed to children under 13. The app is intended for driving, travel, and
-      map utility use. If you believe a child has provided personal information through the app,
-      please contact us so we can review the issue.
+      If you manually share a trip summary image or other content through your device share sheet,
+      that is a user-initiated action and the selected receiving app controls its own handling
+      of the shared content.
     </p>
 
     <h2>Security</h2>
     <p>
-      DrivePulse stores app-created trip and measurement data locally on your device. No method of
-      electronic storage is completely secure, but the app is designed to avoid unnecessary cloud
-      transfer of your saved trip and measurement records in the current version.
+      DrivePulse keeps app-created trip and measurement records on your device in the current
+      version. Network services such as Google Maps and Firebase use their own transport security
+      practices. No method of electronic storage or transmission is completely secure.
     </p>
+
+    <h2>Data Deletion</h2>
+    <p>
+      You can delete saved trips from the trip history screens and delete saved measurements
+      from the saved measurements screen. You can also remove local DrivePulse data by clearing
+      app storage or uninstalling the app from your device.
+    </p>
+    <p>
+      Because DrivePulse does not currently use DrivePulse accounts or cloud sync, deleting local
+      app data removes the local records controlled by the app on that device.
+    </p>
+
+    <h2>Children's Privacy</h2>
+    <p>
+      DrivePulse is not directed to children under 13. The app is intended for driving, travel,
+      map utility, and measurement use. If you believe a child has provided personal information
+      through the app, please contact us.
+    </p>
+
+    <h2>Current Release Scope</h2>
+    <p>The current release may include:</p>
+    <ul>
+      <li>Live map, traffic map, current location, map styles, and Street View access.</li>
+      <li>GPS speedometer with KM/H and MPH support, full-screen speed, HUD mode, and speed alerts.</li>
+      <li>Trip recording, trip history, trip analytics, trip detail, deletion, and summary image sharing.</li>
+      <li>Distance, area, and radius measurement tools with saved measurement support.</li>
+      <li>Settings for language, theme, speed units, and default map style.</li>
+      <li>Android Firebase Analytics for usage analytics and app improvement.</li>
+    </ul>
 
     <h2>Changes To This Policy</h2>
     <p>
-      We may update this Privacy Policy when DrivePulse adds new features, such as cloud sync,
-      exports, analytics, premium purchases, ads, or background trip recording. Updates will be
-      posted on this page with a revised effective date.
+      This Privacy Policy may be updated when DrivePulse adds or changes features such as cloud sync,
+      account login, subscriptions, ads, background trip recording, crash reporting, or expanded
+      analytics. Updates will be posted on this page with a revised effective date.
     </p>
 
     <h2>Contact</h2>
     <p>
       If you have questions about this Privacy Policy or DrivePulse privacy practices, contact:
     </p>
-    <p>
-      <strong>Email:</strong> vishalbhimporwala@gmail.com
-    </p>
+    <p><strong>Email:</strong> vishalbhimporwala@gmail.com</p>
 
-    <h2>Current Release Scope</h2>
-    <p>The current release includes:</p>
-    <ul>
-      <li>Live traffic map and current location support.</li>
-      <li>GPS speedometer with KM/H and MPH support.</li>
-      <li>Full-screen speed and HUD speed display.</li>
-      <li>Trip recording, trip history, trip detail, and saved trip deletion.</li>
-      <li>Distance, area, and radius measurement tools.</li>
-      <li>Saved measurement creation, update, and deletion.</li>
-      <li>Local on-device data storage.</li>
-    </ul>
+    <section class="card warning">
+      <p>
+        Play Store Data Safety declarations must match the app behavior and third-party SDKs in
+        the release build. Review your final build before submitting updates to Google Play.
+      </p>
+    </section>
 
-    <p class="meta">
-      Note: This document is provided for app listing and user transparency. You should review it
-      with a qualified legal professional if you need legal advice for a specific jurisdiction.
+    <p class="footer-note">
+      This document is provided for app transparency and store listing use. It is not legal advice.
+      Review with a qualified legal professional if you need jurisdiction-specific legal guidance.
     </p>
   </main>
 </body>
