@@ -199,8 +199,8 @@
       </p>
       <p>
         Some app functionality uses third-party services such as Google Maps and, on Android,
-        Firebase Analytics. Those services may process limited technical, usage, device, or
-        location-related information as described below.
+        Firebase Analytics and Firebase Crashlytics. Those services may process limited technical,
+        usage, device, diagnostic, or location-related information as described below.
       </p>
     </section>
 
@@ -239,6 +239,13 @@
         <p>
           Android builds may use Firebase Analytics for app interactions, screen usage,
           feature usage, diagnostics, and device or app identifiers.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Crash And Diagnostic Data</h3>
+        <p>
+          Android release builds may use Firebase Crashlytics for crash reports,
+          non-fatal error reports, app version, screen name, and limited technical diagnostics.
         </p>
       </div>
       <div class="data-row">
@@ -289,9 +296,10 @@
 
     <h2>Analytics And Diagnostics</h2>
     <p>
-      DrivePulse may use Firebase Analytics on Android to understand which screens and features
-      are used, monitor app behavior, and improve reliability. Analytics data may include app
-      interactions, screen names, feature events, diagnostics, and device or app identifiers.
+      DrivePulse may use Firebase Analytics and Firebase Crashlytics on Android to understand
+      which screens and features are used, monitor app behavior, diagnose crashes and non-fatal
+      errors, and improve reliability. Analytics and diagnostics data may include app interactions,
+      screen names, feature events, crash logs, diagnostics, app version, and device or app identifiers.
     </p>
     <p>
       DrivePulse should not intentionally log precise trip routes, saved measurement points,
@@ -316,6 +324,10 @@
         <strong>Firebase Analytics on Android:</strong> Used for usage analytics and app
         improvement as described above.
       </li>
+      <li>
+        <strong>Firebase Crashlytics on Android:</strong> Used for crash reporting,
+        non-fatal error reporting, diagnostics, and app reliability improvements.
+      </li>
     </ul>
     <p>
       Google's Privacy Policy is available at
@@ -328,8 +340,9 @@
       DrivePulse backend, account sync, or cloud backup for saved trips and measurements.
     </p>
     <p>
-      Data may be processed by service providers such as Google Maps Platform and Firebase
-      Analytics to provide maps, analytics, diagnostics, and related app functionality.
+      Data may be processed by service providers such as Google Maps Platform, Firebase
+      Analytics, and Firebase Crashlytics to provide maps, analytics, diagnostics, and
+      related app functionality.
     </p>
     <p>
       If you manually share a trip summary image or other content through your device share sheet,
@@ -371,6 +384,7 @@
       <li>Distance, area, and radius measurement tools with saved measurement support.</li>
       <li>Settings for language, theme, speed units, and default map style.</li>
       <li>Android Firebase Analytics for usage analytics and app improvement.</li>
+      <li>Android Firebase Crashlytics for crash and non-fatal error diagnostics.</li>
     </ul>
 
     <h2>Changes To This Policy</h2>
