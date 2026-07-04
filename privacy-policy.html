@@ -186,7 +186,7 @@
         </p>
       </div>
       <p class="meta">
-        <span class="pill"><strong>Effective:</strong> June 23, 2026</span>
+        <span class="pill"><strong>Effective:</strong> July 4, 2026</span>
         <span class="pill"><strong>App:</strong> DrivePulse</span>
         <span class="pill"><strong>Package:</strong> com.drivepulse.gps</span>
       </p>
@@ -199,8 +199,9 @@
       </p>
       <p>
         Some app functionality uses third-party services such as Google Maps and, on Android,
-        Firebase Analytics and Firebase Crashlytics. Those services may process limited technical,
-        usage, device, diagnostic, or location-related information as described below.
+        Google Mobile Ads, the Google User Messaging Platform, Firebase Analytics, Firebase
+        Crashlytics, and Firebase Remote Config. Those services may process technical, usage,
+        advertising, device, diagnostic, consent, or location-related information as described below.
       </p>
     </section>
 
@@ -249,6 +250,31 @@
         </p>
       </div>
       <div class="data-row">
+        <h3>Advertising Data</h3>
+        <p>
+          Android builds may use Google Mobile Ads to display banner, native, interstitial,
+          and app-open ads. The SDK may automatically collect or share IP address, app and ad
+          interactions, diagnostic information, advertising identifiers, app-set identifiers,
+          and other device or account identifiers for advertising, analytics, and fraud prevention.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Consent And Privacy Choices</h3>
+        <p>
+          The Google User Messaging Platform may request, store, and communicate consent or
+          privacy choices where required. These choices can affect whether personalized,
+          non-personalized, or limited ads may be requested.
+        </p>
+      </div>
+      <div class="data-row">
+        <h3>Remote Configuration</h3>
+        <p>
+          Firebase Remote Config is used to retrieve feature flags and configuration values.
+          Firebase may use an app installation identifier and limited app or device information
+          to deliver the applicable configuration to an app installation.
+        </p>
+      </div>
+      <div class="data-row">
         <h3>Shared Content</h3>
         <p>
           When you choose to share a trip summary image, the image is handled by the app
@@ -266,6 +292,9 @@
       <li>Creating, saving, editing, updating, and deleting distance, area, and radius measurements.</li>
       <li>Remembering app preferences such as language, theme, map style, and units.</li>
       <li>Understanding app usage and stability so DrivePulse can be improved.</li>
+      <li>Displaying, measuring, limiting, and protecting advertising where enabled.</li>
+      <li>Obtaining required advertising consent and applying applicable privacy choices.</li>
+      <li>Delivering feature flags and configuration without requiring an app update.</li>
     </ul>
 
     <h2>Location Permission</h2>
@@ -312,6 +341,48 @@
       <a href="https://firebase.google.com/support/privacy">Firebase Privacy and Security</a>.
     </p>
 
+    <h2>Advertising And Consent</h2>
+    <p>
+      Android builds may display ads provided through Google AdMob and the Google Mobile Ads SDK.
+      Depending on the screen and configuration, these may include banner, native, interstitial,
+      full-screen native, or app-open presentations. Ads may be enabled, disabled, or selected
+      through remote configuration.
+    </p>
+    <p>
+      Google states that the Google Mobile Ads SDK automatically collects and shares IP address,
+      user product interactions such as app launches, taps, and video views, diagnostic information,
+      and device or account identifiers such as the Android advertising ID and app-set ID. Google
+      uses this information for advertising, analytics, and fraud prevention. An IP address may be
+      used to estimate a device's general location.
+    </p>
+    <p>
+      DrivePulse does not intentionally send precise GPS coordinates, recorded route points,
+      saved measurement points, trip titles, or saved measurement titles to the Google Mobile Ads
+      SDK as ad-request parameters.
+    </p>
+    <p>
+      Where required, DrivePulse uses Google's User Messaging Platform to request and apply consent
+      or privacy choices before requesting ads. The available choices and resulting ad treatment
+      depend on your region, Google's consent message configuration, applicable law, and whether
+      Google permits ads to be requested. Ads may be personalized, non-personalized, or limited.
+    </p>
+    <p>
+      You can reset or delete the Android advertising ID using your device's advertising privacy
+      controls. Learn more from
+      <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Google Mobile Ads data disclosure</a>
+      and <a href="https://policies.google.com/technologies/ads">Google advertising technologies</a>.
+    </p>
+
+    <h2>Remote Configuration</h2>
+    <p>
+      Android builds use Firebase Remote Config to retrieve feature availability, advertising
+      configuration, onboarding behavior, update behavior, and other operational settings.
+      The app keeps a local fallback and may cache the last successful configuration on the device.
+      Remote Config uses an installation identifier to fetch configuration for an app installation.
+      Remote configuration values do not contain your saved trips, route points, measurements,
+      titles, or precise location.
+    </p>
+
     <h2>Third-Party Services</h2>
     <p>DrivePulse uses third-party services to provide app functionality:</p>
     <ul>
@@ -328,6 +399,19 @@
         <strong>Firebase Crashlytics on Android:</strong> Used for crash reporting,
         non-fatal error reporting, diagnostics, and app reliability improvements.
       </li>
+      <li>
+        <strong>Firebase Remote Config on Android:</strong> Used to retrieve and cache feature
+        flags, operational settings, advertising configuration, and rollout controls.
+      </li>
+      <li>
+        <strong>Google AdMob and Google Mobile Ads on Android:</strong> Used to request,
+        display, measure, and protect advertisements, and to support advertising analytics
+        and fraud prevention.
+      </li>
+      <li>
+        <strong>Google User Messaging Platform on Android:</strong> Used to obtain and apply
+        advertising consent and privacy choices where required.
+      </li>
     </ul>
     <p>
       Google's Privacy Policy is available at
@@ -340,9 +424,11 @@
       DrivePulse backend, account sync, or cloud backup for saved trips and measurements.
     </p>
     <p>
-      Data may be processed by service providers such as Google Maps Platform, Firebase
-      Analytics, and Firebase Crashlytics to provide maps, analytics, diagnostics, and
-      related app functionality.
+      Data may be collected, processed, or shared by service providers such as Google Maps
+      Platform, Firebase Analytics, Firebase Crashlytics, Firebase Remote Config, Google AdMob,
+      Google Mobile Ads, and the Google User Messaging Platform to provide maps, analytics,
+      diagnostics, configuration, advertising, consent management, fraud prevention, and related
+      app functionality.
     </p>
     <p>
       If you manually share a trip summary image or other content through your device share sheet,
@@ -367,6 +453,12 @@
       Because DrivePulse does not currently use DrivePulse accounts or cloud sync, deleting local
       app data removes the local records controlled by the app on that device.
     </p>
+    <p>
+      Clearing app data or uninstalling DrivePulse does not necessarily delete information already
+      processed by third-party service providers. Their retention and deletion practices are governed
+      by their respective policies. You may reset or delete your Android advertising ID through your
+      device settings.
+    </p>
 
     <h2>Children's Privacy</h2>
     <p>
@@ -385,13 +477,17 @@
       <li>Settings for language, theme, speed units, and default map style.</li>
       <li>Android Firebase Analytics for usage analytics and app improvement.</li>
       <li>Android Firebase Crashlytics for crash and non-fatal error diagnostics.</li>
+      <li>Android Firebase Remote Config for feature flags and operational configuration.</li>
+      <li>Android Google AdMob and Google Mobile Ads for advertising.</li>
+      <li>Android Google User Messaging Platform for applicable advertising consent choices.</li>
     </ul>
 
     <h2>Changes To This Policy</h2>
     <p>
       This Privacy Policy may be updated when DrivePulse adds or changes features such as cloud sync,
-      account login, subscriptions, ads, background trip recording, crash reporting, or expanded
-      analytics. Updates will be posted on this page with a revised effective date.
+      account login, subscriptions, new advertising providers, background trip recording,
+      cloud storage, or expanded analytics. Updates will be posted on this page with a revised
+      effective date.
     </p>
 
     <h2>Contact</h2>
