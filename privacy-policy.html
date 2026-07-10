@@ -200,8 +200,9 @@
       <p>
         Some app functionality uses third-party services such as Google Maps and, on Android,
         Google Mobile Ads, the Google User Messaging Platform, Firebase Analytics, Firebase
-        Crashlytics, and Firebase Remote Config. Those services may process technical, usage,
-        advertising, device, diagnostic, consent, or location-related information as described below.
+        Crashlytics, Firebase Remote Config, and Google Play Billing. Those services may process
+        technical, usage, advertising, device, diagnostic, consent, billing, subscription, or
+        location-related information as described below.
       </p>
     </section>
 
@@ -259,6 +260,16 @@
         </p>
       </div>
       <div class="data-row">
+        <h3>Subscription And Purchase Data</h3>
+        <p>
+          Android builds may use Google Play Billing for premium subscriptions. DrivePulse may
+          receive and store limited subscription entitlement details such as product ID, base plan,
+          offer ID, purchase state, purchase token, acknowledgement state, expiry-related status,
+          and whether premium access is active. DrivePulse does not receive your full payment card
+          number or bank account details.
+        </p>
+      </div>
+      <div class="data-row">
         <h3>Consent And Privacy Choices</h3>
         <p>
           The Google User Messaging Platform may request, store, and communicate consent or
@@ -293,6 +304,7 @@
       <li>Remembering app preferences such as language, theme, map style, and units.</li>
       <li>Understanding app usage and stability so DrivePulse can be improved.</li>
       <li>Displaying, measuring, limiting, and protecting advertising where enabled.</li>
+      <li>Loading Google Play subscription details, processing premium purchases, checking active entitlement, and hiding ads for active premium subscribers.</li>
       <li>Obtaining required advertising consent and applying applicable privacy choices.</li>
       <li>Delivering feature flags and configuration without requiring an app update.</li>
     </ul>
@@ -373,6 +385,31 @@
       and <a href="https://policies.google.com/technologies/ads">Google advertising technologies</a>.
     </p>
 
+    <h2>Subscriptions And Google Play Billing</h2>
+    <p>
+      Android builds may offer DrivePulse Premium subscriptions through Google Play Billing.
+      Subscription products, prices, trial availability, billing period, taxes, purchase confirmation,
+      renewal, cancellation, and refunds are handled by Google Play and shown in the Google Play
+      purchase flow before purchase.
+    </p>
+    <p>
+      DrivePulse uses Google Play Billing to query available subscription plans, start purchases,
+      acknowledge purchases where required, restore purchases, and check whether a premium subscription
+      is active. The app may store the last known premium entitlement state locally so it can decide
+      whether to show ads or premium purchase options during startup.
+    </p>
+    <p>
+      Purchase-related information can include product ID, base plan ID, offer ID, purchase token,
+      purchase state, acknowledgement state, purchase time, auto-renewing or entitlement state, and
+      limited order or account information provided through Google Play Billing. DrivePulse does not
+      collect or store full payment card numbers, bank account numbers, or Google account passwords.
+    </p>
+    <p>
+      You can manage or cancel subscriptions through Google Play subscription settings:
+      <a href="https://play.google.com/store/account/subscriptions">https://play.google.com/store/account/subscriptions</a>.
+      Google Play's privacy practices are described in Google's Privacy Policy.
+    </p>
+
     <h2>Remote Configuration</h2>
     <p>
       Android builds use Firebase Remote Config to retrieve feature availability, advertising
@@ -411,6 +448,10 @@
       <li>
         <strong>Google User Messaging Platform on Android:</strong> Used to obtain and apply
         advertising consent and privacy choices where required.
+      </li>
+      <li>
+        <strong>Google Play Billing on Android:</strong> Used to show subscription products,
+        process premium subscription purchases, restore purchases, and check active premium access.
       </li>
     </ul>
     <p>
@@ -480,6 +521,7 @@
       <li>Android Firebase Remote Config for feature flags and operational configuration.</li>
       <li>Android Google AdMob and Google Mobile Ads for advertising.</li>
       <li>Android Google User Messaging Platform for applicable advertising consent choices.</li>
+      <li>Android Google Play Billing for premium subscription products, purchase flow, purchase restore, and premium entitlement checks.</li>
     </ul>
 
     <h2>Changes To This Policy</h2>
