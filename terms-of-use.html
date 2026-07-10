@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DrivePulse Terms of Use</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071017;
+      --panel: #101b25;
+      --panel-soft: #132532;
+      --text: #f4f8fb;
+      --muted: #a8b7c5;
+      --line: #263848;
+      --accent: #00d983;
+      --accent-soft: rgba(0, 217, 131, 0.14);
+      --warning: #ffc857;
+      --danger: #ff5a66;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0, 217, 131, 0.12), transparent 34rem),
+        linear-gradient(145deg, #071017 0%, #0a121b 52%, #05090f 100%);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 48px 20px 72px;
+    }
+
+    header {
+      display: grid;
+      gap: 18px;
+      padding: 28px;
+      margin-bottom: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(16, 27, 37, 0.96), rgba(12, 21, 30, 0.96));
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 34px 0 14px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 17px;
+    }
+
+    p, li {
+      color: var(--muted);
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    strong {
+      color: var(--text);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pill strong {
+      margin-right: 6px;
+    }
+
+    .card {
+      padding: 22px;
+      margin: 16px 0;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(16, 27, 37, 0.86);
+    }
+
+    .notice {
+      border-color: rgba(0, 217, 131, 0.32);
+      background: var(--accent-soft);
+    }
+
+    .warning {
+      border-color: rgba(255, 200, 87, 0.35);
+      background: rgba(255, 200, 87, 0.08);
+    }
+
+    .danger {
+      border-color: rgba(255, 90, 102, 0.35);
+      background: rgba(255, 90, 102, 0.08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .data-row {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel-soft);
+    }
+
+    .data-row p:last-child {
+      margin-bottom: 0;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      color: #81909f;
+      font-size: 14px;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding-top: 28px;
+      }
+
+      header,
+      .card {
+        padding: 18px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>DrivePulse Terms of Use</h1>
+        <p>
+          These Terms govern your use of DrivePulse, a GPS driving utility for traffic maps,
+          speed tracking, trip recording, saved measurements, and map measurement tools.
+        </p>
+      </div>
+      <p class="meta">
+        <span class="pill"><strong>Effective:</strong> July 10, 2026</span>
+        <span class="pill"><strong>App:</strong> DrivePulse</span>
+        <span class="pill"><strong>Package:</strong> com.drivepulse.gps</span>
+      </p>
+    </header>
+
+    <section class="card notice">
+      <p>
+        By installing, opening, or using DrivePulse, you agree to these Terms. If you do not agree,
+        do not use the app. These Terms should be read together with the
+        <a href="https://vishalbhimporwala.github.io/PrivacyPolicy/privacy-policy.html">DrivePulse Privacy Policy</a>.
+      </p>
+    </section>
+
+    <h2>1. App Functionality</h2>
+    <p>DrivePulse may provide features such as:</p>
+    <ul>
+      <li>Live traffic map, map styles, current location, and Street View entry points.</li>
+      <li>GPS speedometer, full-screen speed display, HUD mode, and speed alerts.</li>
+      <li>Trip recording, trip history, trip analytics, trip detail, and trip summary sharing.</li>
+      <li>Distance, area, and radius measurement tools with saved measurement support.</li>
+      <li>Language, theme, speed unit, map style, advertising, and premium subscription features.</li>
+    </ul>
+
+    <h2>2. Safety And Responsible Use</h2>
+    <section class="card danger">
+      <p>
+        DrivePulse is not a safety-critical navigation, emergency, law enforcement, or professional
+        surveying tool. Do not interact with the app in a way that distracts you while driving.
+        Always follow traffic laws, road signs, posted speed limits, and local regulations.
+      </p>
+    </section>
+    <p>
+      Speed, traffic, distance, area, radius, route, location, and measurement values are estimates.
+      GPS accuracy, map data, device sensors, network availability, terrain, buildings, weather,
+      and third-party services can affect results.
+    </p>
+    <p>
+      HUD mode and speed alerts are convenience features only. They do not replace safe driving,
+      dashboard instruments, vehicle systems, or legal speed limit awareness.
+    </p>
+
+    <h2>3. Location, Map, And Measurement Limitations</h2>
+    <p>
+      DrivePulse relies on device location services and third-party map providers. Maps, traffic,
+      Street View, and location-dependent features may be unavailable, delayed, incomplete, or inaccurate.
+    </p>
+    <p>
+      Measurement tools are intended for general utility and planning. Do not rely on DrivePulse for
+      legal land boundaries, construction, engineering certification, property disputes, safety analysis,
+      or any use requiring professional-grade accuracy.
+    </p>
+
+    <h2>4. Free Features, Ads, And Premium</h2>
+    <p>
+      DrivePulse may offer both free and paid features. Free usage may include advertisements.
+      Premium subscriptions may unlock benefits such as an ad-free experience, unlimited saved trips,
+      unlimited saved measurements, and premium map tools, depending on the current app configuration
+      and the plan shown in Google Play at checkout.
+    </p>
+    <p>
+      Feature availability can change over time. Some features may be enabled, disabled, tested,
+      or configured through remote configuration, app updates, or platform availability.
+    </p>
+
+    <h2>5. Subscriptions, Free Trials, Billing, And Cancellation</h2>
+    <p>
+      DrivePulse subscriptions are processed by Google Play. The plan name, price, billing period,
+      free trial availability, renewal terms, taxes, and final purchase details are shown in the
+      Google Play purchase flow before you confirm.
+    </p>
+    <p>
+      If you accept a free trial, Google Play may automatically start the paid subscription when
+      the trial ends unless you cancel before the trial period expires. Subscription renewal,
+      cancellation, grace period, account hold, and payment retry behavior is managed by Google Play.
+    </p>
+    <p>
+      You can manage or cancel subscriptions through Google Play subscriptions settings:
+      <a href="https://play.google.com/store/account/subscriptions">https://play.google.com/store/account/subscriptions</a>.
+      When you cancel, access usually continues until the end of the current billing period unless
+      Google Play or applicable law provides a different result.
+    </p>
+    <p>
+      Refund requests are handled according to Google Play policies and applicable law. DrivePulse
+      does not collect your payment card details and cannot directly modify Google Play billing records.
+    </p>
+
+    <h2>6. User Data And Local Storage</h2>
+    <p>
+      Saved trips, saved measurements, app preferences, and entitlement status may be stored locally
+      on your device. You are responsible for keeping any exported or shared files safe.
+    </p>
+    <p>
+      If you delete app data or uninstall DrivePulse, local records may be lost. DrivePulse does not
+      currently provide an account system or cloud sync for restoring saved trips or measurements.
+    </p>
+
+    <h2>7. Third-Party Services</h2>
+    <p>
+      DrivePulse may use third-party services including Google Maps Platform, Firebase, Google AdMob,
+      Google User Messaging Platform, Google Play Billing, Google Play in-app updates, and system share
+      features. Third-party services are governed by their own terms, policies, availability, and limits.
+    </p>
+
+    <h2>8. Acceptable Use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use DrivePulse in a way that violates law, traffic rules, privacy rights, or platform policies.</li>
+      <li>Reverse engineer, tamper with, abuse, overload, or bypass app security, billing, ads, or entitlement checks.</li>
+      <li>Use the app to track another person without lawful permission.</li>
+      <li>Misrepresent measurement, trip, route, or speed outputs as certified professional results.</li>
+    </ul>
+
+    <h2>9. Intellectual Property</h2>
+    <p>
+      DrivePulse, its app design, branding, text, icons, and original functionality are owned by the
+      developer or licensed to the developer. Third-party maps, SDKs, services, trademarks, and content
+      remain owned by their respective providers.
+    </p>
+
+    <h2>10. No Warranty</h2>
+    <p>
+      DrivePulse is provided "as is" and "as available" without warranties of any kind to the maximum
+      extent permitted by law. The developer does not guarantee uninterrupted operation, error-free
+      results, exact location accuracy, exact speed accuracy, complete traffic coverage, or availability
+      of third-party services.
+    </p>
+
+    <h2>11. Limitation Of Liability</h2>
+    <p>
+      To the maximum extent permitted by law, the developer is not liable for indirect, incidental,
+      special, consequential, exemplary, or punitive damages, or for losses related to driving decisions,
+      map errors, GPS errors, measurement errors, data loss, missed routes, subscription issues handled
+      by Google Play, third-party service outages, or use of the app in unsafe conditions.
+    </p>
+
+    <h2>12. Changes To The App Or Terms</h2>
+    <p>
+      DrivePulse may change, suspend, remove, or add features. These Terms may be updated from time to
+      time. Updates will be posted on this page with a revised effective date. Continued use of the app
+      after changes means you accept the updated Terms.
+    </p>
+
+    <h2>13. Contact</h2>
+    <p>
+      If you have questions about these Terms or DrivePulse, contact:
+    </p>
+    <p><strong>Email:</strong> vishalbhimporwala@gmail.com</p>
+
+    <section class="card warning">
+      <p>
+        These Terms are provided for app transparency and store listing use. They are not legal advice.
+        Review with a qualified legal professional if you need jurisdiction-specific terms.
+      </p>
+    </section>
+
+    <p class="footer-note">
+      DrivePulse is an independent app and is not endorsed by Google. Google Play, Google Maps,
+      Firebase, and AdMob are trademarks or services of Google LLC.
+    </p>
+  </main>
+</body>
+</html>
