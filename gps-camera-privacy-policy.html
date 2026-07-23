@@ -320,13 +320,13 @@
             </div>
             <h1>Privacy Policy</h1>
             <p>This policy explains how GPS Site Camera: Stamp handles information when you use the mobile application.</p>
-            <p class="meta"><strong>Effective date:</strong> July 20, 2026</p>
+            <p class="meta"><strong>Effective date:</strong> July 23, 2026</p>
         </header>
 
         <div class="content">
             <aside class="summary" aria-label="Privacy summary">
                 <strong>Privacy at a glance</strong>
-                Photos and videos stay on your device by default. The app uses foreground location for GPS stamps and may send coordinates to mapping or geocoding services to provide map and address features. We do not sell your personal information.
+                Photos and videos stay on your device by default. The app uses foreground location for GPS stamps, may send coordinates to mapping or geocoding services, and may show app-open, rewarded, native, banner, or interstitial advertising to eligible free users. We do not sell your personal information.
             </aside>
 
             <section id="scope">
@@ -336,6 +336,9 @@
                 </p>
                 <p>
                     By using the App, you acknowledge the practices described in this policy. If you do not agree, do not use the App or grant permissions that you do not want the App to access.
+                </p>
+                <p>
+                    Use of the App is also governed by our <a href="gps-camera-terms-of-use.html">Terms of Use</a>.
                 </p>
             </section>
 
@@ -365,13 +368,17 @@
                         <p>If paid products are offered, Google Play may process product, transaction, subscription, and purchase-status information.</p>
                     </div>
                     <div class="data-item">
-                        <h3>Technical request information</h3>
-                        <p>Mapping providers may receive an IP address, request metadata, and coordinates when map or address features are used.</p>
+                        <h3>Technical and configuration information</h3>
+                        <p>Mapping providers may receive an IP address, request metadata, and coordinates when map or address features are used. Firebase Remote Config may process an app-installation identifier, IP address, and limited device, app, request, and diagnostic information to deliver operational configuration.</p>
+                    </div>
+                    <div class="data-item">
+                        <h3>Advertising and consent information</h3>
+                        <p>For eligible free users, Google’s User Messaging Platform checks and presents advertising privacy choices during app startup before Google Mobile Ads requests are enabled. Google may then process device identifiers, IP address, advertising interactions, diagnostics, and privacy choices when app-open, rewarded, native, banner, or interstitial advertising is available.</p>
                     </div>
                 </div>
 
                 <p style="margin-top: 20px;">
-                    The App does not currently require an account, and we do not operate an application server that receives your captured photos, videos, or location history. The current version does not include a third-party advertising SDK or third-party analytics SDK.
+                    The App does not currently require an account, and we do not operate an application server that receives your captured photos, videos, or location history. The App includes Google Mobile Ads and Google’s User Messaging Platform for app-open ads, rewarded ads, clearly identified native ads, anchored banner ads, interstitial ads at eligible action boundaries for free users, and consent management. It does not currently include a separate third-party analytics SDK.
                 </p>
             </section>
 
@@ -384,6 +391,12 @@
                     <li>To remember your language, onboarding progress, camera controls, stamp template, and other preferences.</li>
                     <li>To retrieve map images and convert coordinates into a readable address.</li>
                     <li>To process and restore purchases if paid features are made available.</li>
+                    <li>To offer an optional rewarded ad that temporarily unlocks an eligible premium feature for the current app session.</li>
+                    <li>To show app-open ads to eligible returning free users, subject to configured eligibility and frequency limits.</li>
+                    <li>To show interstitial ads to eligible free users after configured capture milestones or when leaving eligible Settings and template screens.</li>
+                    <li>To show anchored banner ads on eligible Settings, template, template-editing, and map-data screens for free users.</li>
+                    <li>To record and apply advertising privacy and consent choices where required.</li>
+                    <li>To retrieve and apply operational feature and advertising-placement configuration.</li>
                     <li>To diagnose failures using limited local logs that are designed not to include photos or precise location values.</li>
                 </ul>
             </section>
@@ -418,7 +431,7 @@
                     </tr>
                     <tr>
                         <th scope="row">Internet and network state</th>
-                        <td>Retrieves static maps, supports address lookup through platform services, and communicates with Google Play for purchases when available.</td>
+                        <td>Retrieves static maps, supports address lookup through platform services, communicates with Google Play for purchases, retrieves Firebase Remote Config settings, and loads app-open, rewarded, native, banner, or interstitial ads when eligible.</td>
                     </tr>
                     </tbody>
                 </table>
@@ -448,7 +461,16 @@
                         <strong>Google Play Billing:</strong> If you make a purchase, Google Play processes payment and transaction information under Google’s policies. We do not receive your full payment card number.
                     </li>
                     <li>
+                        <strong>Google Mobile Ads and User Messaging Platform:</strong> If advertising is available, Google may process advertising identifiers, IP address, device and request information, ad interactions, diagnostics, and consent choices. App-open ads may appear to eligible returning free users. Rewarded ads are shown only after you choose the rewarded-ad option. Clearly identified native ads may appear at intervals within the Collection screen, anchored banner ads may appear on the Settings, template-selection, template-editing, and map-data screens, and interstitial ads may appear after configured capture milestones or when leaving eligible Settings and template screens for free users. See <a href="https://policies.google.com/privacy" rel="noopener noreferrer">Google’s Privacy Policy</a> and <a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">Advertising policies and controls</a>.
+                    </li>
+                    <li>
+                        <strong>Firebase Remote Config:</strong> On Android, Firebase may process an app-installation identifier, IP address, and limited device, app, request, and diagnostic information to provide operational configuration and emergency feature controls. Remote Config is not used to store photos, videos, precise location, or confidential information. See the <a href="https://firebase.google.com/support/privacy" rel="noopener noreferrer">Firebase privacy and security information</a> and <a href="https://policies.google.com/privacy" rel="noopener noreferrer">Google Privacy Policy</a>.
+                    </li>
+                    <li>
                         <strong>User-directed sharing:</strong> When you use Save, Export, or Share, the selected photo, video, or report is provided to the gallery, photo library, application, service, or person you choose. The recipient’s privacy practices then apply.
+                    </li>
+                    <li>
+                        <strong>Sharing the App:</strong> When you choose Share GPS Site Camera in Settings, the App sends a standard app description and store link only to the application or person you select. It does not attach your captures or location information.
                     </li>
                     <li>
                         <strong>Legal and safety reasons:</strong> We may disclose information if required by applicable law or if reasonably necessary to protect users, rights, safety, or the integrity of the App. Because we do not operate a media-storage server, we generally do not possess your captures.
@@ -461,6 +483,8 @@
                 <ul>
                     <li>Use device settings to review or revoke camera, location, microphone, and photo-library permissions.</li>
                     <li>Disable map thumbnails in the App settings to avoid Static Maps requests for stamp previews.</li>
+                    <li>Decline the rewarded-ad option and continue using the free template, or purchase Premium without watching rewarded ads.</li>
+                    <li>Use the controls presented by Google’s User Messaging Platform during startup when advertising privacy choices are required in your region.</li>
                     <li>Delete captures using the App’s Collection controls where available.</li>
                     <li>Delete exported copies from your gallery, photo library, file manager, or sharing destination.</li>
                     <li>Clear the App’s storage or uninstall the App to remove app-controlled local data.</li>
@@ -507,7 +531,8 @@
         </div>
 
         <footer class="document-footer">
-            Privacy Policy for GPS Site Camera: Stamp · com.geostamp.gpscamera
+            Privacy Policy for GPS Site Camera: Stamp · com.geostamp.gpscamera ·
+            <a href="gps-camera-terms-of-use.html">Terms of Use</a>
         </footer>
     </article>
 </main>
