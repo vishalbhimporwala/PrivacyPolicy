@@ -1,328 +1,238 @@
-# Production Android Contacts Manager — Master Blueprint & Replication Prompt
+# Production Android Contacts Manager — Master Blueprint & Complete AI Replication Prompt
 
-> **Purpose**: This document is a complete, self-contained master blueprint and prompt specification. Giving this document to any AI coding agent allows it to reconstruct and build this exact production-grade, 120Hz-smooth Android Contacts Manager application from scratch.
-
----
-
-## 1. System Overview & Core Mandates
-
-- **Target OS**: Android 7.0 (API 24) to Android 15/17+ (API 37+)
-- **Primary Language**: Kotlin 2.0+ (Strict Type Safety & Coroutines)
-- **UI Framework**: Jetpack Compose with Material 3 (100% Declarative UI)
-- **Architecture**: Clean Architecture + MVVM + Unidirectional Data Flow (UDF)
-- **Data Layer**: Direct integration with Android's system **Contacts Provider** (`ContentResolver` & `ContactsContract`).
-- **CRITICAL RULE**: Android Contacts Provider is the **Single Source of Truth**. **DO NOT** duplicate or mirror user contacts into a local Room database.
-- **Role Constraint**: **DO NOT** request or assume fake `RoleManager` dialer/contacts roles (`ROLE_CONTACTS` or `ROLE_DIALER`).
-- **Privacy & Security**: Zero Contact PII logging (names, numbers, emails, addresses must never be logged or transmitted). Offline-first.
+> **Purpose**: This document contains the exhaustive, screen-by-screen, feature-by-feature master prompt. Giving this file to any AI coding agent provides all specifications, code structures, data contracts, and performance secrets required to build this exact production-grade, 120Hz-smooth Android Contacts Manager application.
 
 ---
 
-## 2. Critical Performance Secrets (The 120Hz Compose Blueprint)
+# 📋 THE COMPLETE AI AGENT MASTER PROMPT
 
-If an AI agent creates a naive `LazyColumn` in Jetpack Compose, the list will stutter and drop frames during rapid flings. The following rules **must** be enforced:
-
-### A. Zero Allocations in Data Models
-- **Never compute regex or string splits in getters on the UI thread**.
-- `ContactSummary.initials`, `sortLetter`, and `stableKey` must be pre-calculated in constructor properties using primitive character indexing (`indexOf(' ')`), never `split("\\s+".toRegex())`.
-
-```kotlin
-private fun computeSortLetter(displayName: String): Char {
-    val firstChar = displayName.trimStart().firstOrNull()?.uppercaseChar() ?: '#'
-    return if (firstChar in 'A'..'Z') firstChar else '#'
-}
-
-private fun computeInitials(displayName: String): String {
-    val trimmed = displayName.trim()
-    if (trimmed.isEmpty()) return "?"
-    val firstSpace = trimmed.indexOf(' ')
-    return if (firstSpace > 0 && firstSpace + 1 < trimmed.length) {
-        val nextChar = trimmed.substring(firstSpace + 1).trimStart().firstOrNull()
-        if (nextChar != null && nextChar.isLetterOrDigit()) {
-            "${trimmed[0].uppercaseChar()}${nextChar.uppercaseChar()}"
-        } else {
-            trimmed.take(2).uppercase()
-        }
-    } else {
-        trimmed.take(2).uppercase()
-    }
-}
-
-data class ContactSummary(
-    val id: Long,
-    val lookupKey: String,
-    val displayName: String,
-    val photoThumbnailUri: String? = null,
-    val isFavorite: Boolean = false,
-    val hasPhoneNumber: Boolean = false,
-    val stableKey: String = if (lookupKey.isNotEmpty()) lookupKey else id.toString(),
-    val sortLetter: Char = computeSortLetter(displayName),
-    val initials: String = computeInitials(displayName)
-)
-```
-
-### B. Flattened List Architecture with Strict `contentType`
-- **Do not nest section headers conditionally inside contact item composables**.
-- Pre-compute a flattened list on `Dispatchers.Default` using a sealed interface:
-
-```kotlin
-sealed interface ContactListItem {
-    data class Header(val letter: Char) : ContactListItem
-    data class Contact(val contact: ContactSummary) : ContactListItem
-}
-```
-- In `LazyColumn`, supply dedicated keys and `contentType`:
-```kotlin
-items(
-    items = listItems,
-    key = { item ->
-        when (item) {
-            is ContactListItem.Header -> "header_${item.letter}"
-            is ContactListItem.Contact -> item.contact.stableKey
-        }
-    },
-    contentType = { item ->
-        when (item) {
-            is ContactListItem.Header -> "header"
-            is ContactListItem.Contact -> "contact"
-        }
-    }
-)
-```
-
-### C. Fixed Height Constraints (Zero Dynamic Remeasurement)
-- Give `ContactRow` a strict fixed height (e.g. `Modifier.fillMaxWidth().height(58.dp)`).
-- Give `AlphabetHeader` a strict fixed height (e.g. `Modifier.fillMaxWidth().height(32.dp)`).
-- This allows Compose's `LazyLayout` to compute prefetch coordinates in $0\mu s$ without measuring layout bounds on the UI thread during high-speed flings.
-
-### D. Zero-Layer GPU Clipping & `BasicText`
-- Avoid `Modifier.clip(CircleShape)` on parent containers—it allocates off-screen GPU `saveLayer` buffers. Use `Modifier.background(color, CircleShape)`.
-- Use **`BasicText`** with pre-cached `TextStyle` inside fast-scrolling list items to bypass `MaterialTheme` dynamic `CompositionLocal` lookups on every frame.
-
-### E. Coil Hardware Bitmaps & In-Memory Cache
-- In `Application.onCreate()`, configure `ImageLoaderFactory` with 25% RAM `MemoryCache` and 50MB `DiskCache`.
-- In avatar items, pass `ImageRequest.Builder(context).allowHardware(true).crossfade(false).memoryCacheKey(photoUri).build()`.
-
-### F. FastScroller Mutex Management
-- In touch scrubbing (`FastScroller`), maintain a single `var scrollJob: Job?`. Cancel previous jobs before calling `lazyListState.scrollToItem(targetIndex)` to prevent Compose scroll mutex lock contention.
-- Keep the touch strip strictly `28.dp` wide so it never interferes with list flings.
-
----
-
-## 3. Contacts Provider & ContentResolver Blueprint
-
-### A. Main List Lightweight Projection
-Never query `ContactsContract.Data` for the main list. Query only lightweight columns:
-```kotlin
-val SUMMARY_PROJECTION = arrayOf(
-    Contacts._ID,
-    Contacts.LOOKUP_KEY,
-    Contacts.DISPLAY_NAME_PRIMARY,
-    Contacts.PHOTO_THUMBNAIL_URI,
-    Contacts.STARRED,
-    Contacts.HAS_PHONE_NUMBER
-)
-```
-
-### B. Third-Party Shadow Sync Filtering (`IN_VISIBLE_GROUP = 1`)
-WhatsApp, Telegram, and sync adapters create internal shadow contact records. To match Google Contacts and avoid duplicate list items:
-- Filter the main query with `${Contacts.IN_VISIBLE_GROUP} = 1`.
-- Include an automatic fallback to unfiltered queries if a device has no contact groups configured (e.g. SIM-only contacts).
-
-### C. Contact Detail Deduplication
-When opening contact details, raw contacts from Google, WhatsApp, SIM, and Truecaller are aggregated. Normalize and deduplicate:
-- **Phone Numbers**: Strip non-digits (`replace("[\\s\\-\\(\\)\\.]".toRegex(), "")`) to deduplicate `86258 16285` vs `8625816285`.
-- **Emails**: Trim & lowercase deduplication.
-- **Websites & Addresses**: Normalized string deduplication.
-
-### D. Crash Prevention on OEM Custom ROMs
-- **NEVER** query non-standard internal columns like `RawContacts.RAW_CONTACT_IS_READ_ONLY`—it throws `IllegalArgumentException: Invalid column` on standard Android SQLite providers.
-- Always wrap detail queries in `runCatching { ... }.getOrNull()`.
-
-### E. Atomic Batch Writes
-All creations, updates, and deletions must execute as atomic multi-row batches using `ContentResolver.applyBatch(ContactsContract.AUTHORITY, ops)` with back-references:
-```kotlin
-val ops = ArrayList<ContentProviderOperation>()
-ops.add(ContentProviderOperation.newInsert(RawContacts.CONTENT_URI)
-    .withValue(RawContacts.ACCOUNT_NAME, accountName)
-    .withValue(RawContacts.ACCOUNT_TYPE, accountType)
-    .build())
-
-ops.add(ContentProviderOperation.newInsert(Data.CONTENT_URI)
-    .withValueBackReference(Data.RAW_CONTACT_ID, 0)
-    .withValue(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE)
-    .withValue(StructuredName.GIVEN_NAME, givenName)
-    .build())
-
-contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
-```
-
----
-
-## 4. Real-Time Synchronization Engine
-
-To eliminate the 5–10 second delay when switching between Google Contacts and this app:
-
-1. **Root Authority Registration**: Register `ContentObserver` on:
-   - `content://com.android.contacts` (`ContactsContract.AUTHORITY`)
-   - `ContactsContract.Contacts.CONTENT_URI`
-   - `ContactsContract.Data.CONTENT_URI`
-   - `ContactsContract.RawContacts.CONTENT_URI`
-2. **Instant Foreground Resume Trigger**:
-   In `MainActivity.onResume()`, call `appContainer.contactsRepository.refresh()`, which emits to the shared flow immediately.
-3. **Debounce Buffer**: Set to `100ms` for smooth conflation without perception latency.
-
----
-
-## 5. Navigation & Screen Structure
-
-- **Architecture**: Jetpack Navigation Compose with Kotlinx Serialization type-safe routes (`@Serializable`).
-- **Main Tabs**:
-  1. `Contacts`: Main alphabetical list, search bar, fast alphabet scroller, floating add button.
-  2. `Favorites`: Live starred contacts synchronized with `Contacts.STARRED`.
-  3. `Fix & Manage`: Contact health metrics (unnamed count, contacts without phone numbers, duplicate merge tools, VCF import/export).
-  4. `Settings`: Theme mode (System/Light/Dark), Dynamic Color toggle (Android 12+), Sort order (First Name vs Last Name), Name format (First Name First vs Last Name First).
-- **Secondary Screens**:
-  - `ContactDetailScreen`: Photo header, Call, Text, Email, Share action chips (`FilledTonalIconButton`), expandable info cards, star toggle, delete dialog.
-  - `ContactEditorScreen`: Name fields (Prefix, First, Middle, Last, Suffix), dynamic multi-phone, multi-email, address, company, birthday, notes, account destination picker, zero-permission Jetpack Photo Picker (`ActivityResultContracts.PickVisualMedia`).
-  - `ContactsAccessSetupScreen`: Permission onboarding with explanation, privacy declaration, and system settings navigation.
-
----
-
-## 6. Directory Structure & Key Files
-
-```
-app/src/main/java/com/vbappsstudio/contacts/
-├── ContactsApplication.kt                # App entry point, DI Container init, Coil ImageLoaderFactory
-├── MainActivity.kt                       # SplashScreen API, onResume sync trigger, NavHost root
-├── core/
-│   ├── di/AppContainer.kt                # Pure Kotlin Dependency Injection container
-│   ├── dispatchers/CoroutineDispatchers.kt# IO, Default, Main testable dispatchers
-│   ├── intents/ContactIntents.kt         # Safe external intent dispatcher (Call, SMS, Email, Share)
-│   └── permissions/
-│       ├── ContactsAccessState.kt        # NoAccess, ReadOnly, ReadWrite capability states
-│       └── PermissionManager.kt          # Permission checker and app settings launcher
-├── data/
-│   ├── datasource/ContactsDataSource.kt  # Low-level ContentResolver wrapper
-│   ├── model/
-│   │   ├── ContactSummary.kt             # Lightweight, pre-calculated list item model
-│   │   ├── ContactDetails.kt             # Full profile detail model
-│   │   └── LabeledItem.kt                # Typed phone, email, address records
-│   ├── observer/ContactsContentObserver.kt# Multi-URI real-time sync observer
-│   ├── preferences/PreferencesRepository.kt# Jetpack DataStore preferences
-│   ├── provider/
-│   │   ├── ContactsQuery.kt              # Optimized SQLite projections, filters, and deduplicators
-│   │   └── ContactsWriter.kt             # Atomic ContentProviderOperation batch writers
-│   └── repository/ContactsRepository.kt  # Unified repository interface and implementation
-├── domain/
-│   ├── model/AlphabetSection.kt          # Flattened ContactListItem and grouping models
-│   └── usecase/
-│       ├── BuildAlphabetSectionsUseCase.kt# <50ms 10,000-contact sectioning & indexer
-│       └── ContactsUseCases.kt           # Domain use cases (Get, Search, Details, Save, Delete, Favorite)
-├── feature/
-│   ├── contacts/                         # Main contact list & FastScroller
-│   ├── detail/                           # Profile viewer & quick actions
-│   ├── editor/                           # Multi-field editor & Photo Picker
-│   ├── favorites/                        # Starred contacts
-│   ├── fixandmanage/                     # Health metrics & cleanup tools
-│   ├── monetization/                     # Decoupled Ad/IAP boundary
-│   ├── settings/                         # DataStore theme & sorting preferences
-│   ├── setup/                            # Permissions onboarding UI
-│   └── startup/                          # Splash coordinator & router
-└── ui/
-    ├── navigation/                       # Type-safe AppNavHost & routes
-    └── theme/                            # Material 3 dynamic color theme
-```
-
----
-
-## 7. Build Configuration & Dependencies
-
-### `gradle/libs.versions.toml`
-```toml
-[versions]
-agp = "8.8.2"
-kotlin = "2.0.21"
-composeBom = "2024.12.01"
-coreKtx = "1.15.0"
-coreSplashscreen = "1.0.1"
-navigationCompose = "2.8.5"
-datastorePreferences = "1.1.1"
-coilCompose = "2.7.0"
-kotlinxCoroutines = "1.9.0"
-kotlinxSerialization = "1.7.3"
-
-[libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
-androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-```
-
-### `app/build.gradle.kts`
-```kotlin
-plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
-}
-
-android {
-    namespace = "com.vbappsstudio.contacts"
-    compileSdk = 35
-
-    defaultConfig {
-        applicationId = "com.vbappsstudio.contacts"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    buildFeatures {
-        compose = true
-    }
-}
-```
-
----
-
-## 8. Master Agent Replication Prompt
-
-*Copy and paste the prompt below into any AI agent to replicate this exact application:*
+*Copy everything between the start and end prompt markers below and give it to any AI agent:*
 
 ```text
-You are a Principal Android Architect. Build a production-grade Android Contacts Manager application for Google Play with support for 10,000+ contacts and 120Hz smooth scrolling.
+================================================================================
+>>> START MASTER PROMPT: PRODUCTION ANDROID CONTACTS MANAGER <<<
+================================================================================
 
-Follow the specifications in the master blueprint:
-1. Android Contacts Provider is the single source of truth using ContentResolver and ContactsContract. Do NOT duplicate contacts into a local Room database.
-2. Real-time synchronization using a ContentObserver on root contacts authority with instant foreground onResume() refresh and 100ms debounce.
-3. Strict lightweight projection query for main list (_ID, LOOKUP_KEY, DISPLAY_NAME_PRIMARY, PHOTO_THUMBNAIL_URI, STARRED, HAS_PHONE_NUMBER).
-4. Filter out shadow third-party sync contacts with Contacts.IN_VISIBLE_GROUP = 1 matching Google Contacts.
-5. In ContactSummary, precalculate initials and sort keys with zero regex and zero array allocations.
-6. In Compose LazyColumn, implement flattened list items (ContactListItem.Header and ContactListItem.Contact) with strict contentType and fixed heights (58dp for rows, 32dp for headers) and BasicText for 120Hz scrolling.
-7. FastScroller alphabet scrubber with single Job cancellation to prevent scroll mutex contention.
-8. Normalize and deduplicate multi-raw contact phone numbers (e.g. "86258 16285" vs "8625816285").
-9. Multi-field Contact Editor with zero-permission Jetpack Photo Picker (PickVisualMedia) and atomic ContentProviderOperation.applyBatch writes.
-10. Android SplashScreen API, Permissions onboarding screen, DataStore settings, and decoupled Monetization boundary.
-11. Pass all unit tests and build cleanly with R8 release minification enabled.
+You are a Principal Android Architect & Staff Android Engineer. Build a complete, production-grade Android Contacts Manager application intended for Google Play distribution and 10,000+ contact scale.
+
+Do NOT create fake mock repositories, in-memory lists, or demo architectures. The application must work directly with Android's system Contacts Provider using ContentResolver and ContactsContract so that changes made by this app or external apps (like Google Contacts, WhatsApp, OEM apps) are instantly reflected bidirectionally.
+
+--------------------------------------------------------------------------------
+1. CORE ARCHITECTURAL RULES & MANDATES
+--------------------------------------------------------------------------------
+1. Android Contacts Provider is the SINGLE SOURCE OF TRUTH.
+   - Do NOT duplicate or cache contacts into a local Room database.
+   - All queries, mutations, and batch writes must run strictly on Dispatchers.IO via ContentResolver.
+2. NO Fake RoleManager / Dialer Flow:
+   - Do NOT request or assume fake ROLE_CONTACTS or ROLE_DIALER roles.
+   - Never declare CALL_PHONE or SEND_SMS permissions. External actions must use standard safe Android intents (ACTION_DIAL, ACTION_SENDTO, ACTION_VIEW, ACTION_SEND) with ActivityNotFoundException fallbacks.
+3. Privacy & Security:
+   - Zero Contact PII logging: Never log contact names, phone numbers, emails, addresses, or notes to logcat.
+   - Fully offline-first: No internet permission required for contacts.
+4. Splash Screen API:
+   - Use androidx.core.splashscreen.SplashScreen.
+   - StartupCoordinator with StartupState (Loading, ContactsAccessRequired, Ready) to determine routing without artificial delays or blocking the main UI thread.
+
+--------------------------------------------------------------------------------
+2. 120Hz FAST-SCROLLING PERFORMANCE SECRETS (COMPOSE LAZYCOLUMN)
+--------------------------------------------------------------------------------
+To achieve locked 120 FPS scrolling without micro-stutters or frame drops:
+1. Zero Regex / Precomputed Properties in ContactSummary:
+   - NEVER call split("\\s+".toRegex()) inside getters or composables.
+   - Precalculate initials, sortLetter, and stableKey in the constructor using primitive character indexing (indexOf(' ')).
+2. Flattened List Hierarchy with Strict contentType:
+   - Do NOT nest section headers conditionally inside contact item composables.
+   - Pre-compute a flattened List<ContactListItem> on Dispatchers.Default with:
+     * ContactListItem.Header(val letter: Char) -> key: "header_$letter", contentType: "header"
+     * ContactListItem.Contact(val contact: ContactSummary) -> key: contact.stableKey, contentType: "contact"
+3. Exact Fixed Height Constraints:
+   - ContactRow must have a strict fixed height: Modifier.fillMaxWidth().height(58.dp).padding(horizontal = 20.dp).
+   - AlphabetHeader must have a strict fixed height: Modifier.fillMaxWidth().height(32.dp).padding(horizontal = 20.dp).
+   - This allows Compose's LazyLayout to compute prefetch coordinates in 0 microseconds during fast flings.
+4. Zero-Layer GPU Clipping & BasicText:
+   - Avoid Modifier.clip(CircleShape) on parent Box containers (which creates off-screen Skia saveLayer buffers). Use Modifier.background(backgroundColor, CircleShape).
+   - Use BasicText with pre-cached static TextStyle in ContactRow and ContactAvatar to bypass MaterialTheme dynamic CompositionLocal lookups on every frame.
+5. Coil In-Memory Hardware Bitmap Caching:
+   - In Application class, configure ImageLoaderFactory with 25% RAM MemoryCache and 50MB DiskCache.
+   - In avatar ImageRequest, pass allowHardware(true), crossfade(false), and memoryCacheKey(photoUri).
+6. FastScroller Mutex Management:
+   - In FastScroller, maintain a single scrollJob: Job? and cancel previous jobs before calling lazyListState.scrollToItem(targetIndex) to prevent Compose scroll mutex fighting.
+   - Lock FastScroller width to exactly 28.dp so it never intercepts normal list flings.
+
+--------------------------------------------------------------------------------
+3. CONTACTS PROVIDER & QUERY DEDUPLICATION ENGINE
+--------------------------------------------------------------------------------
+1. Main List Lightweight Projection:
+   Query only lightweight columns:
+   - Contacts._ID, Contacts.LOOKUP_KEY, Contacts.DISPLAY_NAME_PRIMARY, Contacts.PHOTO_THUMBNAIL_URI, Contacts.STARRED, Contacts.HAS_PHONE_NUMBER.
+2. Third-Party Sync Shadow Filtering (IN_VISIBLE_GROUP = 1):
+   - WhatsApp, Telegram, and sync adapters create internal shadow contact records.
+   - Query with Contacts.IN_VISIBLE_GROUP = 1 to hide shadow duplicates, matching Google Contacts.
+   - Include automatic fallback to unfiltered queries if a device has no contact groups configured.
+3. Multi-Account Phone & Email Deduplication:
+   - When viewing contact details, aggregate raw contacts from Google, WhatsApp, SIM, etc.
+   - Normalize phone numbers by stripping whitespace, hyphens, and parentheses to deduplicate "86258 16285" vs "8625816285".
+   - Deduplicate emails case-insensitively and trim whitespace.
+4. OEM Custom ROM Crash Prevention:
+   - NEVER query internal non-standard columns like RawContacts.RAW_CONTACT_IS_READ_ONLY.
+   - Always wrap detail queries in runCatching { ... }.getOrNull().
+5. Atomic Batch Mutations:
+   - All contact creations, updates, and deletes must execute atomically using ContentResolver.applyBatch(ContactsContract.AUTHORITY, ops) with back-references (withValueBackReference(Data.RAW_CONTACT_ID, 0)).
+
+--------------------------------------------------------------------------------
+4. REAL-TIME SYNCHRONIZATION ENGINE
+--------------------------------------------------------------------------------
+1. Multi-URI Registration:
+   Register ContentObserver on:
+   - content://com.android.contacts (ContactsContract.AUTHORITY)
+   - ContactsContract.Contacts.CONTENT_URI
+   - ContactsContract.Data.CONTENT_URI
+   - ContactsContract.RawContacts.CONTENT_URI
+2. Instant Foreground onResume() Trigger:
+   In MainActivity.onResume(), immediately call appContainer.contactsRepository.refresh() to emit a sync signal without waiting for OS background alarms.
+3. Conflated 100ms Debounce:
+   Debounce raw ContentObserver events to 100ms for rapid, buttery-smooth updates.
+
+--------------------------------------------------------------------------------
+5. SCREEN-BY-SCREEN DETAILED SPECIFICATIONS
+--------------------------------------------------------------------------------
+
+### SCREEN 1: ContactsAccessSetupScreen (Permissions Onboarding)
+- Visual illustration/icon for Contacts access.
+- Headline & concise description explaining why Read/Write permissions are required.
+- Clear Privacy Commitment card ("Your contacts stay completely on your device. We never upload or share your data").
+- Primary Button: "Grant Access" (launches RequestMultiplePermissions for READ_CONTACTS and WRITE_CONTACTS).
+- Denied / Permanently Denied State: Displays "Contacts permission is required to manage your contacts" with a button to "Open App Settings" via Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).
+
+### SCREEN 2: MainScreen (Bottom Navigation Container)
+- Bottom Navigation Bar with 4 tabs:
+  1. Contacts (Icon: Contacts)
+  2. Favorites (Icon: Favorite / Star)
+  3. Fix & Manage (Icon: Build / Tools)
+  4. Settings (Icon: Settings)
+
+### SCREEN 3: ContactsScreen (Main Contact List)
+- Top Bar: SearchBar with placeholder ("Search X contacts..."), search icon, and clear query button.
+- Real-time debounced (200ms) search across contact names and phone number digits with coroutine cancellation (flatMapLatest).
+- Main List: LazyColumn rendering flattened items (AlphabetHeader and ContactRow) with strict keys and contentTypes.
+- Alphabet FastScroller on the right side:
+  * 28dp touch strip showing 'A'..'Z' and '#'.
+  * Touch & drag scrubbing with tactile haptic feedback (TextHandleMove).
+  * Floating circular letter bubble indicator tracking the thumb during drag.
+- Floating Action Button (FAB): "+" icon to open ContactEditorScreen in create mode (visible when write access is available).
+- Empty States:
+  * Search empty: "No matching contacts found for '<query>'".
+  * List empty: "No contacts yet. Contacts added to your phone will appear here automatically."
+
+### SCREEN 4: FavoritesScreen (Starred Contacts)
+- Top Bar: "Favorites" title.
+- Displays contacts where Contacts.STARRED == 1.
+- Tapping a contact navigates directly to ContactDetailScreen.
+- Empty State: Star outline icon with message "No favorite contacts. Star your favorite contacts from their details page to access them quickly here."
+
+### SCREEN 5: ContactDetailScreen (Profile & Quick Actions)
+- Top App Bar:
+  * Back navigation arrow.
+  * Star/Favorite toggle icon (filled gold star when starred, outline when not).
+  * Edit icon button (navigates to ContactEditorScreen in edit mode).
+  * Delete icon button with Confirmation Dialog ("Delete contact? This contact will be permanently deleted from your device").
+- Header Section:
+  * Large circular profile photo (or colorful avatar with initials fallback).
+  * Contact display name (bold headline).
+  * Account source badge: "Saved to <email/Google Account>" or "Saved to Phone/SIM".
+- Quick Action Buttons (Row of circular FilledTonalIconButton with labels):
+  1. Call (Icons.Default.Call) -> ACTION_DIAL with tel:<number>
+  2. Text (Icons.AutoMirrored.Filled.Message) -> ACTION_SENDTO with smsto:<number>
+  3. Email (Icons.Default.Email) -> ACTION_SENDTO with mailto:<email>
+  4. Share (Icons.Default.Share) -> ACTION_SEND with contact vCard/text payload
+  * Buttons are automatically disabled with dimmed styling if the contact lacks phone/email.
+- Expandable Detail Cards:
+  * Phone Numbers Card: List of numbers with type label (Mobile, Work, Home), call tap, SMS button, and Copy to clipboard button.
+  * Email Addresses Card: List of emails with type label, email send button, and Copy button.
+  * Postal Addresses Card: List of addresses with Map pin icon and ACTION_VIEW geo intent.
+  * Organization Card: Company name, job title, and department.
+  * Websites Card: List of URLs with browser launch intent.
+  * Birthday / Events Card: Date display with calendar icon.
+  * Notes Card: Full contact notes.
+
+### SCREEN 6: ContactEditorScreen (Create & Edit)
+- Top App Bar:
+  * Close/Cancel 'X' button with Discard Changes confirmation dialog if fields are modified.
+  * Title: "Create Contact" or "Edit Contact".
+  * "Save" text button (validates that at least a name or phone number is provided).
+- Account Destination Selector (for new contacts):
+  * "Save to" dropdown card listing available device accounts (e.g. Google accounts vs Device/Phone storage).
+- Photo Picker Section:
+  * Large avatar with camera overlay button.
+  * Uses zero-permission ActivityResultContracts.PickVisualMedia() for photo selection.
+  * "Remove photo" option if a photo exists.
+- Name Fields (OutlinedTextFields):
+  * First name, Middle name, Last name.
+  * Expandable "More name fields" button revealing Name prefix (Dr., Mr.) and Name suffix (Jr., III).
+- Dynamic Multi-Phone Section:
+  * List of phone number rows with number input and Type dropdown (Mobile, Home, Work, Main, Other, Custom).
+  * Delete row button for each entry.
+  * "+ Add phone" text button to add additional numbers.
+- Dynamic Multi-Email Section:
+  * List of email rows with email input and Type dropdown (Home, Work, Other, Custom).
+  * Delete row button for each entry.
+  * "+ Add email" text button.
+- Organization Section: Company name, Job title, Department.
+- Address Section: Street address with Type dropdown.
+- Websites Section: "+ Add website" with URL inputs.
+- Significant Date / Birthday Section: Date input.
+- Notes Section: Multi-line note input.
+
+### SCREEN 7: FixAndManageScreen (Health Metrics & Tools)
+- Top App Bar: "Fix & Manage".
+- Cleanup & Maintenance Card:
+  * "Merge duplicates": Combined scanner extension point.
+  * "Contacts without phone numbers": Live metric badge showing exact count.
+  * "Contacts without names": Live metric badge showing exact count.
+- Import & Export Card:
+  * "Export to .vcf file": Save all contacts to a standard vCard file.
+  * "Import from .vcf file": Restore contacts from a vCard backup.
+  * "Backup & Restore": Manage device backups.
+- Organization Tools Card:
+  * "Contact Groups & Labels": Extension point for ContactsContract.Groups.
+
+### SCREEN 8: SettingsScreen (DataStore Preferences)
+- Top App Bar: "Settings".
+- Display & Theme Section:
+  * Theme Mode Selector: Radio dialog / dropdown for "System default", "Light", "Dark".
+  * Dynamic Color Toggle (Material You): Switch enabling/disabling dynamic wallpaper colors on Android 12+ (API 31+).
+- Contact List Preferences Section:
+  * Sort by: "First name" vs "Last name".
+  * Name format: "First name first" (John Doe) vs "Last name first" (Doe, John).
+  * Default Account for New Contacts: Selector for Google account vs Device storage.
+- Privacy & Information Card:
+  * App version, Single Source of Truth architecture description, and zero-data-collection privacy guarantee.
+
+--------------------------------------------------------------------------------
+6. DEPENDENCY INJECTION & MONETIZATION BOUNDARY
+--------------------------------------------------------------------------------
+1. AppContainer:
+   - Provide a clean, pure Kotlin DI container (AppContainer / DefaultAppContainer) initialized in ContactsApplication.
+   - Holds singletons: CoroutineDispatchers, PermissionManager, ContactsObserver, PreferencesRepository, ContactsDataSource, ContactsRepository, UseCases.
+2. Monetization Boundary:
+   - Keep future monetization (AdMob, In-App Purchases, Subscriptions) strictly isolated behind a MonetizationBoundary / MonetizationManager presentation wrapper.
+   - Contact domain and data layers must never reference or depend on ads or billing code.
+
+--------------------------------------------------------------------------------
+7. VERIFICATION & TESTING REQUIREMENTS
+--------------------------------------------------------------------------------
+1. Unit Tests:
+   - AlphabetSectionTest: Benchmarks grouping 10,000 items in < 50ms and 20,000 items in < 100ms.
+   - ContactSummaryModelTest: Verifies initials extraction and sort letter logic without regex.
+   - ContactsAccessStateTest: Verifies capability flags (canRead, canWrite, isRestricted).
+   - StartupCoordinatorTest: Verifies splash state transitions.
+   - ContactsRepositoryTest: Verifies repository operations and observer triggers.
+   - DeduplicationTest: Verifies phone number formatting normalization and deduplication.
+2. Release Build:
+   - Run ./gradlew testDebugUnitTest assembleDebug assembleRelease.
+   - Must pass all tests and compile cleanly with R8 optimization enabled (0 errors).
+
+================================================================================
+>>> END MASTER PROMPT: PRODUCTION ANDROID CONTACTS MANAGER <<<
+================================================================================
 ```
